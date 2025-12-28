@@ -31,19 +31,18 @@ if __name__ == "__main__":
     while True:
         # Listen for the wake word "Jarvis"
         # obtain audio from the microphone
-        
          
         print("recognizing...")
         try:
             with sr.Microphone() as source:
                 print("Listening...")
-                audio = r.listen(source, timeout=2, phrase_time_limit=1)
+                audio = r.listen(source, timeout=2, phrase_time_limit=2)
             word = r.recognize_google(audio).lower()
             if("exit" in word or "quit" in word or "stop" in word):
                 speak("Goodbye")
                 print("Jarvis leaving")
                 break
-            if(word == "jarvis"):
+            if("jarvis" in word):
                 speak("Ya")
                 time.sleep(0.7)
                 # Listen for command
