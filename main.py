@@ -3,6 +3,7 @@ import webbrowser
 import time
 import musicLibrary
 import requests
+import wikipedia
 
 import pyttsx3
 
@@ -47,11 +48,45 @@ def processCommand(c):
                 speak(title)
                 time.sleep(0.6)
 
-    else:
-        #let openAI handle it
-        
+    elif "who is" in c or "what is" in c or "tell me about" in c:
+        if "who is" in c:
+            topic = c.replace("who is", "").strip()
+        elif "what is" in c:
+            topic = c.replace("what is", "").strip()
+        else:
+            topic = c.replace("tell me about", "").strip()
 
-    
+        # 🔑 AUTO-DISAMBIGUATION FOR COMMON TERMS
+        science_map = {
+            "flower": "flower botany",
+            "force": "force physics",
+            "work": "work physics",
+            "power": "power physics",
+            "energy": "energy physics"
+        }
+
+        if topic in science_map:
+            topic = science_map[topic]
+
+        print(f"Searching Wikipedia for: {topic}")
+        speak(f"Searching Wikipedia for {topic}")
+
+        time.sleep(1)
+
+        try:
+            summary = wikipedia.summary(topic, sentences=2)
+            print("Wikipedia says:")
+            print(summary)
+            speak(summary)
+
+        except wikipedia.exceptions.DisambiguationError:
+            speak("This topic has multiple meanings. Please be more specific.")
+
+        except wikipedia.exceptions.PageError:
+            speak("Sorry, I could not find information on that topic.")
+
+
+
 
 if __name__ == "__main__":
     speak("Initializing Jarvis....")
